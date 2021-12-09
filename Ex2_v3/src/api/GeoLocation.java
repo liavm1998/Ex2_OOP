@@ -1,6 +1,6 @@
 package api;
 /**
- * This interface represents a geo location <x,y,z>, (aka Point3D data).
+ * This interface represents a geo classes.location <x,y,z>, (aka Point3D data).
  *
  */
 public interface GeoLocation {

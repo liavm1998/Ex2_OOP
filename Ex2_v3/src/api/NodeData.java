@@ -11,12 +11,12 @@ public interface NodeData {
 	 * @return
 	 */
 	public int getKey();
-	/** Returns the location of this node, if none return null.
+	/** Returns the classes.location of this node, if none return null.
 	 * @return
 	 */
 	public GeoLocation getLocation();
-	/** Allows changing this node's location.
-	 * @param p - new new location  (position) of this node.
+	/** Allows changing this node's classes.location.
+	 * @param p - new new classes.location  (position) of this node.
 	 */
 	public void setLocation(GeoLocation p);
 	/**
