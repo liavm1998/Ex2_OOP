@@ -35,7 +35,7 @@ for every node we find the longest path that is has from all the shortest paths 
 this is a well known problem that has no real cost efficient way to salve for this solution we can pass an a given Node more then once so for every Node we will find the shortest path to any node in the list we do this until we reach all the Nodes in the list  
 
 
-### **links**
+### **Links**
 ---
 more infurmation about DFS:  
 https://en.wikipedia.org/wiki/Depth-first_search  
@@ -43,5 +43,25 @@ https://en.wikipedia.org/wiki/Depth-first_search
 more infurmation about Dijkstra's algorithm:  
 https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm  
 
-### **Interface,class**  
+### **Interface,class,UML**  
 ---  
+Interface:  
+* DirectedWeightedGraph
+* DirectedWeightedGraphAlgorithms
+* EdgeData
+* GeoLocation
+* NodeData  
+
+class:
+* Dijkstra
+* EX2
+* FibonacciHeap
+* GUI_MyFrame
+* GUI_Panel
+* location
+* MyNode
+* MyAlgo
+* MyEdge
+* MyGraph  
+![צילום מסך 2021-12-09 172518](https://user-images.githubusercontent.com/92921822/145424927-416babe3-3c3e-499d-8442-7f6c59537554.jpg)
+
