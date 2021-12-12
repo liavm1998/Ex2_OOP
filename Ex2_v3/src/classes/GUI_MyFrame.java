@@ -4,6 +4,7 @@ import api.EdgeData;
 import api.NodeData;
 
 import javax.swing.*;
+import javax.xml.stream.Location;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -122,7 +123,8 @@ public class GUI_MyFrame extends JFrame
                     MyNode a=new MyNode(Integer.parseInt(id),new location(coordinates));
                     algo.getGraph().addNode(a);
                     MyGraph g = (MyGraph) algo.getGraph();
-                    JOptionPane.showInputDialog("node added successfully");
+
+                    JOptionPane.showMessageDialog(null,"node added successfully");
                     setVisible(false);
                     new GUI_MyFrame((MyGraph) algo.getGraph());
                 }
@@ -132,7 +134,7 @@ public class GUI_MyFrame extends JFrame
                     MyNode a=new MyNode(Integer.parseInt(id),new location(coordinates));
                     MyGraph g = (MyGraph) algo.getGraph();
                     g.addNode(a);
-                    JOptionPane.showInputDialog("node moved successfully");
+                    JOptionPane.showMessageDialog(null,"node moved successfully");
                     setVisible(false);
                     new GUI_MyFrame(g);
                 }
@@ -317,16 +319,45 @@ public class GUI_MyFrame extends JFrame
                 String id=(JOptionPane.showInputDialog(frame, "which node to remove (by id)", null));
                 MyGraph g= (MyGraph) algo.getGraph();
                 int  NodeId=Integer.parseInt(id);
-                g.removeNode(NodeId);
-                setVisible(false);
-                algo.init(g);
-                new GUI_MyFrame((MyGraph) algo.getGraph());
+                if(algo.getGraph().getNode(NodeId)==null)
+                {
+                    JOptionPane.showMessageDialog(null,"the node doesn't exist");
+                }
+                else
+                {
+                    g.removeNode(NodeId);
+                    setVisible(false);
+                    algo.init(g);
+                    new GUI_MyFrame((MyGraph) algo.getGraph());
+                }
             }
         });
+        //////////////////////////////remove edge////////////
         rmvE=new JMenuItem(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String id=(JOptionPane.showInputDialog(frame, "which node to remove (by id)", null));
+                String src=(JOptionPane.showInputDialog(frame, "enter src of the desired edge", null));
+                int source=Integer.parseInt(src);
+                if(algo.getGraph().getNode(source)==null)
+                {
+                    JOptionPane.showMessageDialog(null,"the src node doesn't exist");
+                }
+                else
+                {
+                    String dest=(JOptionPane.showInputDialog(frame, "enter the dest of the desired edge", null));
+                    int d=Integer.parseInt(dest);
+                    if(algo.getGraph().getNode(d)==null)
+                    {
+                        JOptionPane.showMessageDialog(null,"the dest node doesn't exist");
+                    }
+                    else
+                    {
+                        algo.getGraph().removeEdge(source,d);
+                        setVisible(false);
+                        new GUI_MyFrame((MyGraph) algo.getGraph());
+                    }
+
+                }
             }
         });
 
@@ -334,8 +365,61 @@ public class GUI_MyFrame extends JFrame
 
 
         ////////////jmenu info
-        JMenu info=new JMenu();
+        JMenu info=new JMenu("info");
         JMenuItem getNode,GetEdge,SizeOfNodes,SizeOfEdges;
+
+        getNode=new JMenuItem(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String v=(JOptionPane.showInputDialog(frame, "enter the id of the desired node", null));
+                int id=Integer.parseInt(v);
+                location l= (location) algo.getGraph().getNode(id).getLocation();
+                String loc= l.x()+","+l.y()+","+l.y();
+                JOptionPane.showMessageDialog(null,"the coordinates of node "+v+" are "+loc);
+            }
+        });
+
+        GetEdge=new JMenuItem(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String src=(JOptionPane.showInputDialog(frame, "enter src of the desired edge", null));
+                int source=Integer.parseInt(src);
+                if(algo.getGraph().getNode(source)==null)
+                {
+                    JOptionPane.showMessageDialog(null,"the src node doesn't exist");
+                }
+                else
+                {
+                    String dest=(JOptionPane.showInputDialog(frame, "enter the dest of the desired edge", null));
+                    int d=Integer.parseInt(dest);
+                    if(algo.getGraph().getNode(d)==null)
+                    {
+                        JOptionPane.showMessageDialog(null,"the dest node doesn't exist");
+                    }
+                    else
+                    {
+                        double ans = algo.getGraph().getEdge(source,d).getWeight();
+                        JOptionPane.showMessageDialog(null,"the edge weight is: "+ans);
+
+                    }
+                }
+            }
+        });
+        //////////////////////size of nodes
+        SizeOfNodes=new JMenuItem(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null,"we have "+algo.getGraph().nodeSize()+" nodes in the graph");
+            }
+        });
+
+        //////////////////////size of edges
+        SizeOfEdges=new JMenuItem(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null,"we have "+algo.getGraph().edgeSize()+" edges in the graph");
+            }
+        });
 
         ///////////////name setting//////////
         addNode.setText("add or move Node");
@@ -346,7 +430,11 @@ public class GUI_MyFrame extends JFrame
         shortestPath.setText("shortest Path");
         tsp.setText("TSP");
         rmvN.setText("remove node");
-
+        rmvE.setText("remove edge");
+        getNode.setText("get node coordinates");
+        GetEdge.setText("get edge weight");
+        SizeOfEdges.setText("amount of edges");
+        SizeOfNodes.setText("amount of nodes");
 
         ////////////////adding;
         algorithms.add(addNode);
@@ -357,14 +445,16 @@ public class GUI_MyFrame extends JFrame
         algorithms.add(shortestPath);
         algorithms.add(tsp);
         algorithms.add(rmvN);
+        algorithms.add(rmvE);
 
-
-
-
-
+        info.add(getNode);
+        info.add(GetEdge);
+        info.add(SizeOfEdges);
+        info.add(SizeOfNodes);
 
         menu.add(file);
         menu.add(algorithms);
+        menu.add(info);
 
 
         this.setJMenuBar(menu);

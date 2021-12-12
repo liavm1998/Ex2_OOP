@@ -204,6 +204,15 @@ public class MyGraph extends DirectedGraph implements DirectedWeightedGraph,Comp
     @Override
     public EdgeData removeEdge(int src, int dest)
     {
+
+        for (Point p:this.E.keySet())
+        {
+            if (p.x==src&&p.y==dest)
+            {
+                this.E.remove(p);
+                break;
+            }
+        }
         MyEdge e = (MyEdge) this.V.get(src).getOutEdge(dest);
         this.E.remove(e);
         this.V.get(src).removeEdge(e);
