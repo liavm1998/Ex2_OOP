@@ -69,7 +69,7 @@ public class MyAlgo implements DirectedWeightedGraphAlgorithms {
         for (MyNode v: this.g.getV().values())
         {
             v.setWeight(Double.POSITIVE_INFINITY);
-
+            v.setShortestPath(new ArrayList<>());
         }
         src.setWeight(0);
         Set<MyNode> settledNodes = new HashSet<>();
@@ -199,24 +199,44 @@ public class MyAlgo implements DirectedWeightedGraphAlgorithms {
     @Override
     public List<NodeData> tsp(List<NodeData> cities)
     {
-        ArrayList<MyNode[]> p =new ArrayList<>();
-        List<Object[]> temp=permutations(cities.toArray());
-        for (Object[] arr:temp)
+        List<NodeData> p =new ArrayList<>();
+        List<Integer> temp = new ArrayList<>();
+        for(int i =0;i<cities.size();i++)
         {
-            p.add(f(arr));
-        }
-        double cost=Double.MAX_VALUE;
-        NodeData[] ans=new NodeData[0];
-        for (MyNode[] perm:p) {
-            double check=StraightLineDist(perm);
-            if(check<cost)
-            {
-                ans=perm;
-                cost=check;
-            }
+            temp.add(cities.get(i).getKey());
         }
 
-        return List.of(ans);
+        List<NodeData> shortestpath =new ArrayList<>();
+        NodeData cur = cities.get(0);
+        p.add(this.g.getNode(temp.get(0)));
+        temp.remove(0);
+        while (!temp.isEmpty())
+        {
+            double shortestDist = Integer.MAX_VALUE;
+            int idShort = -1;
+            int location = -1;
+            for(int i = 0 ; i < temp.size();i++)
+            {
+                int key =temp.get(i);
+                if(shortestPathDist(cur.getKey(),key) < shortestDist)
+                {
+                    shortestDist = shortestPathDist(cur.getKey(),key);
+                    idShort = key;
+                    location = i;
+                }
+            }
+            shortestpath = shortestPath(cur.getKey(),idShort);
+            shortestpath.remove(0);
+            while (!shortestpath.isEmpty())
+            {
+                p.add(shortestpath.get(0));
+                shortestpath.remove(0);
+            }
+            int Node_to_get = temp.get(location);
+            cur = this.g.getNode(Node_to_get);
+            temp.remove(temp.get(location));
+        }
+        return p;
     }
 
     private double StraightLineDist(MyNode[] perm)
@@ -408,42 +428,107 @@ public class MyAlgo implements DirectedWeightedGraphAlgorithms {
 //        classes.MyAlgo ma=new classes.MyAlgo();
 //        ma.init(gr);
 //        ma.save("C:\\Users\\Liavm\\Desktop\\Ex2_v2\\data\\yeudit.json");
-        MyGraph g=new MyGraph();
-        MyNode a,b,c,d;
-        location a1,b1,c1,d1;
-        a1=new location(0,0,0);
-        b1=new location(1,0,0);
-        c1=new location(0,1,0);
-        d1=new location(0,0,1);
-        a=new MyNode(0,a1);
-        b=new MyNode(1,b1);
-        c=new MyNode(2,c1);
-        d=new MyNode(3,d1);
-        g.addNode(a);
-        g.addNode(b);
-        g.addNode(c);
-        g.addNode(d);
+//        MyGraph g=new MyGraph();
+//        MyNode a,b,c,d;
+//        location a1,b1,c1,d1;
+//        a1=new location(0,0,0);
+//        b1=new location(1,0,0);
+//        c1=new location(0,1,0);
+//        d1=new location(0,0,1);
+//        a=new MyNode(0,a1);
+//        b=new MyNode(1,b1);
+//        c=new MyNode(2,c1);
+//        d=new MyNode(3,d1);
+//        g.addNode(a);
+//        g.addNode(b);
+//        g.addNode(c);
+//        g.addNode(d);
+//
+//        g.connect(0,1,1);
+//        g.connect(0,2,1);
+//        g.connect(0,3,3);
+//        g.connect(1,0,1);
+//        g.connect(1,2,Math.sqrt(2));
+//        g.connect(1,3,Math.sqrt(2));
+//        g.connect(2,0,1);
+//
+//        MyAlgo mg=new MyAlgo();
+//        mg.init(g);
+//        ArrayList<NodeData> ans = (ArrayList<NodeData>) mg.shortestPath(0,3);
+//
+//
+//        double ans2=mg.shortestPathDist(0,3);
+////        System.out.println("the path was:");
+////        for (NodeData v:ans)
+////        {
+////            System.out.print(v.getKey()+" ");
+////        }
+//        System.out.println("\n the dist was:"+ans2);
+        DirectedWeightedGraph graph=new MyGraph();
+        MyAlgo alg=new MyAlgo();
+        MyNode n1,n2,n3,n4,n5,n6;
+        location a1,a2,a3,a4,a5,a6;
+        a1=new location(1,2,0);
+        a2=new location(5,1,0);
+        a3=new location(2,5,0);
+        a4=new location(6,7,0);
+        a5=new location(8,4,0);
+        a6=new location(5,4,0);
+        n1=new MyNode(0,a1);
+        n2=new MyNode(1,a2);
+        n3=new MyNode(2,a3);
+        n4=new MyNode(3,a4);
+        n5=new MyNode(4,a5);
+        n6=new MyNode(5,a6);
+        graph.addNode(n1);
+        graph.addNode(n2);
+        graph.addNode(n3);
+        graph.addNode(n4);
+        graph.addNode(n5);
+        graph.addNode(n6);
+        graph.connect(0,2,14);
+        graph.connect(2,0,14);
+        graph.connect(0,5,9);
+        graph.connect(5,0,9);
+        graph.connect(0,1,7);
+        graph.connect(1,0,7);
+        graph.connect(1,5,10);
+        graph.connect(5,1,10);
+        graph.connect(1,4,15);
+        graph.connect(4,1,15);
+        graph.connect(2,5,2);
+        graph.connect(5,2,2);
+        graph.connect(5,4,20);
+        graph.connect(4,5,20);
+        graph.connect(4,3,60);
+        graph.connect(3,4,60);
+        graph.connect(2,3,100);
+        graph.connect(3,2,100);
+        alg.init(graph);
 
-        g.connect(0,1,1);
-        g.connect(0,2,1);
-        g.connect(0,3,3);
-        g.connect(1,0,1);
-        g.connect(1,2,Math.sqrt(2));
-        g.connect(1,3,Math.sqrt(2));
-        g.connect(2,0,1);
-
-        MyAlgo mg=new MyAlgo();
-        mg.init(g);
-        ArrayList<NodeData> ans = (ArrayList<NodeData>) mg.shortestPath(0,3);
-
-
-        double ans2=mg.shortestPathDist(0,3);
-//        System.out.println("the path was:");
-//        for (NodeData v:ans)
+//        List<NodeData> path = alg.shortestPath(2,3);
+//        for(int i=0;i<path.size();i++)
 //        {
-//            System.out.print(v.getKey()+" ");
+//            System.out.print(path.get(i).getKey()+"->");
 //        }
-        System.out.println("\n the dist was:"+ans2);
+//        System.out.println();
+//        path = alg.shortestPath(1,3);
+//        for(int i=0;i<path.size();i++)
+//        {
+//            System.out.print(path.get(i).getKey()+"->");
+//        }
+
+        Iterator<NodeData> a = alg.getGraph().nodeIter();
+        List<NodeData> run = new ArrayList<>();
+        while (a.hasNext())
+        {
+            run.add(a.next());
+        }
+        List<NodeData> test = alg.tsp(run);
+        for(int i=0;i<test.size();i++)
+        {
+            System.out.print(test.get(i).getKey()+"->");
+        }
     }
 
 }
