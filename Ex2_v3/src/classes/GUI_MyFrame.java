@@ -108,7 +108,7 @@ public class GUI_MyFrame extends JFrame
 
         ///////algo menu
         JMenu algorithms=new JMenu("algorithms");
-        JMenuItem addNode,addEdge,center, isConnected,shortestDist,shortestPath,tsp;
+        JMenuItem addNode,addEdge,center, isConnected,shortestDist,shortestPath,tsp,rmvN,rmvE;
 
 
         ////////////////////////////////////////////////////////addNode///////////////////////////////////////////////////////////////
@@ -309,6 +309,34 @@ public class GUI_MyFrame extends JFrame
 
             }
         });
+        ////////////////////////remove node
+
+        rmvN=new JMenuItem(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String id=(JOptionPane.showInputDialog(frame, "which node to remove (by id)", null));
+                MyGraph g= (MyGraph) algo.getGraph();
+                int  NodeId=Integer.parseInt(id);
+                g.removeNode(NodeId);
+                setVisible(false);
+                algo.init(g);
+                new GUI_MyFrame((MyGraph) algo.getGraph());
+            }
+        });
+        rmvE=new JMenuItem(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String id=(JOptionPane.showInputDialog(frame, "which node to remove (by id)", null));
+            }
+        });
+
+
+
+
+        ////////////jmenu info
+        JMenu info=new JMenu();
+        JMenuItem getNode,GetEdge,SizeOfNodes,SizeOfEdges;
+
         ///////////////name setting//////////
         addNode.setText("add or move Node");
         addEdge.setText("add Edge");
@@ -317,6 +345,7 @@ public class GUI_MyFrame extends JFrame
         shortestDist.setText("shortest Dist");
         shortestPath.setText("shortest Path");
         tsp.setText("TSP");
+        rmvN.setText("remove node");
 
 
         ////////////////adding;
@@ -327,6 +356,7 @@ public class GUI_MyFrame extends JFrame
         algorithms.add(shortestDist);
         algorithms.add(shortestPath);
         algorithms.add(tsp);
+        algorithms.add(rmvN);
 
 
 

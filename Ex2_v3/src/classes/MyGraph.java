@@ -13,6 +13,7 @@ public class MyGraph extends DirectedGraph implements DirectedWeightedGraph,Comp
     //////////properties/////////
     private HashMap<Integer,MyNode> V;
     private HashMap<Point,MyEdge> E;
+
     private int mc;
 
 
@@ -184,22 +185,19 @@ public class MyGraph extends DirectedGraph implements DirectedWeightedGraph,Comp
     public NodeData removeNode(int key)
     {
         MyNode v=this.V.get(key);
-        V.remove(v);
-        for (MyEdge e:E.values())
+        ArrayList<Point>rp=new ArrayList<>();
+        for (Point p:E.keySet())
         {
-            if(e.getSrc()==v.getKey())
+            if(p.x==key||p.y==key)
             {
-                V.get(e.getSrc()).removeEdge(e);
-                E.remove(e);
-
-            }
-
-            if(e.getDest()==v.getKey())
-            {
-                V.get(e.getDest()).removeEdge(e);
-                E.remove(e);
+                rp.add(p);
             }
         }
+        for (Point p:rp)
+        {
+            E.remove(p);
+        }
+        V.remove(key);
         return v;
     }
 
