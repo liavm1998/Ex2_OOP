@@ -66,6 +66,11 @@ public class MyAlgo implements DirectedWeightedGraphAlgorithms {
 
     public void dijkstra(MyNode src)
     {
+        for (MyNode v: this.g.getV().values())
+        {
+            v.setWeight(Double.POSITIVE_INFINITY);
+
+        }
         src.setWeight(0);
         Set<MyNode> settledNodes = new HashSet<>();
         Set<MyNode> unsettledNodes = new HashSet<>();

@@ -30,11 +30,6 @@ public class GUI_Panel extends JPanel
          * placed on the canvas
          */
         setMinMax();
-        Iterator<NodeData> iterator= graph.nodeIter();
-        while(iterator.hasNext())
-        {
-            drawVertex(iterator.next(),graphic);
-        }
         Iterator<EdgeData> i2= graph.edgeIter();
         while (i2.hasNext())
         {
@@ -48,6 +43,12 @@ public class GUI_Panel extends JPanel
                 p2=coordinates_Cal(dest);
                 graphic.drawLine(p1.x, p1.y, p2.x, p2.y);
             }
+        }
+        Iterator<NodeData> iterator= graph.nodeIter();
+        while(iterator.hasNext())
+        {
+            drawVertex(iterator.next(),graphic);
+
         }
         this.setVisible(true);
 
@@ -65,9 +66,13 @@ public class GUI_Panel extends JPanel
 //        oy*=(screenSize.height);
 
         Point p=coordinates_Cal(v);
-        Shape vertex = new Ellipse2D.Double(p.x-5, p.y-5, 12, 12);
+        Shape vertex = new Ellipse2D.Double(p.x-5, p.y-5, 24, 24);
         //Shape vertex = new Ellipse2D.Double(ox, oy, 50, 50);
         graphics.fill(vertex);
+
+        graphics.setColor(Color.black);
+        graphics.setFont(new Font("Ariel", Font.BOLD, 13));
+        graphics.drawString("" + v.getKey(), p.x + 5, p.y + 14);
 
     }
     private Point coordinates_Cal(NodeData v)
