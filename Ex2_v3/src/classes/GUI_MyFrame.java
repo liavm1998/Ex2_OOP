@@ -375,7 +375,7 @@ public class GUI_MyFrame extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, "error ");
             }
         }
-        if (e.getActionCommand() == "is Connected?")
+              if (e.getActionCommand() == "is Connected?")
         {
             if (algo.isConnected()) {
                 ////////pop up this graph is connected
@@ -385,6 +385,7 @@ public class GUI_MyFrame extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, "this graph isn't connected");
 
             }
+            this.repaint();
         }
 
     }
