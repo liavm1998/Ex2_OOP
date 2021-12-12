@@ -55,4 +55,9 @@ public class location implements GeoLocation
           double ans=xd+yd+zd;
           return (Math.sqrt(ans));
     }
+
+    @Override
+    public String toString() {
+        return x()+","+y()+","+z();
+    }
 }

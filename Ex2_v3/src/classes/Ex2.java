@@ -57,7 +57,7 @@ public class Ex2 {
     }
     public static void main(String[] args)
     {
-        runGUI("data//G1.json");
+        runGUI("data//My_10_Nodes.json");
     }
 
 }

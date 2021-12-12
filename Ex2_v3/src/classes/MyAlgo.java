@@ -287,6 +287,7 @@ public class MyAlgo implements DirectedWeightedGraphAlgorithms {
             JSONObject vertex=new JSONObject();
             vertex.put("pos",v.getLocation().toString());
             vertex.put("id",v.getKey());
+            nodes.add(vertex);
         }
         ans.put("Edges",edges);
         ans.put("Nodes",nodes);
