@@ -15,7 +15,7 @@ public class MyNode implements NodeData {
     private ArrayList<MyEdge> out;
 
     /////isConnected components
-    public boolean visited = false;
+    //public boolean visited = false;
 
     /////dikjestra component
     private ArrayList<MyNode> shortestPath = new ArrayList<>();

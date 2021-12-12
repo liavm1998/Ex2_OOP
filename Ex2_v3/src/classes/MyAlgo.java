@@ -39,26 +39,8 @@ public class MyAlgo implements DirectedWeightedGraphAlgorithms {
     {
         MyNode v=this.g.getV().get(0);
         this.g.dfs(v);
-        for (MyNode w:this.g.getV().values())
-        {
-            if(!w.visited)
-            {
-                return false;
-            }
-            w.visited=false;
-        }
         MyGraph r=this.g.reverse();
-//        v=r.getV().get(0);
-          r.dfs(v);
-        for (MyNode w:r.getV().values())
-        {
-            if(!w.visited)
-            {
-                return false;
-            }
-            w.visited=false;
-        }
-        return true;
+        return r.dfs(v)&&this.g.dfs(v);
     }
 
 

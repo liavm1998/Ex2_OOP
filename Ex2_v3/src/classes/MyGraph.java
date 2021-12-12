@@ -301,17 +301,62 @@ public class MyGraph extends DirectedGraph implements DirectedWeightedGraph,Comp
         }
         return g;
     }
-    public void dfs(MyNode v)
+    public boolean dfs(MyNode v)
     {
-        v.visited=true;
-        for (MyEdge e:v.getOutlist())
+        // Initially mark all vertices as not visited
+        Vector<Boolean> visited = new Vector<Boolean>(V.size());
+        for (int i = 0; i < V.size(); i++)
+            visited.add(false);
+        // Create a stack for DFS
+        Stack<MyNode> stack = new Stack<>();
+
+        // Push the current source node
+        stack.push(v);
+        while(!stack.empty())
         {
-            MyNode w=this.getV().get(e.getDest());
-            if(!w.visited)
+            // Pop a vertex from stack
+            v = stack.peek();
+            stack.pop();
+            // Stack may contain same vertex twice. So
+            // we need mark the popped item only
+            // if it is not visited.
+            if(visited.get(v.getKey()) == false)
             {
-                dfs(w);
+                visited.set(v.getKey(), true);
+            }
+            // Get all adjacent vertices of the popped vertex s
+            // If a adjacent has not been visited, then push it
+            // to the stack.
+            Iterator<EdgeData> itr = this.edgeIter(v.getKey());
+
+            while (itr.hasNext())
+            {
+                EdgeData e=itr.next();
+                MyNode v1=this.V.get(e.getDest());
+
+                if(!visited.get(v1.getKey()))
+                    stack.push(v1);
             }
         }
+        for (boolean b:visited)
+        {
+            if (!b)
+            {
+                return false;
+            }
+        }
+
+//        v.visited=true;
+//
+//        for (MyEdge e:v.getOutlist())
+//        {
+//            MyNode w=this.getV().get(e.getDest());
+//            if(!w.visited)
+//            {
+//                dfs(w);
+//            }
+//        }
+        return true;
     }
 
 

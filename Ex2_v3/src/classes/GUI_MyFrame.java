@@ -13,23 +13,25 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class GUI_MyFrame extends JFrame
-{
+public class GUI_MyFrame extends JFrame implements ActionListener {
     MyAlgo algo;
     private JFrame frame;
     GUI_Panel gp;
+    JFrame gui;
+
     ///////constructors
 //    //public classes.GUI_MyFrame()
 //    {
 //        new classes.GUI_MyFrame(new classes.MyGraph());
 //    }
-    public GUI_MyFrame(MyGraph g)
-    {
+    public GUI_MyFrame(MyGraph g) {
 
-        gp=new GUI_Panel(g);
-        algo=new MyAlgo();
+
+
+        algo = new MyAlgo();
         algo.init(g);
-        this.frame =new JFrame();
+        gp = new GUI_Panel(algo);
+        this.frame = new JFrame();
 
 
         //this.setLayout(new BorderLayout());
@@ -41,10 +43,10 @@ public class GUI_MyFrame extends JFrame
         this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
         //this.setBounds();
         this.setTitle("Graph");
-        ImageIcon logo=new ImageIcon("src/Images/logo.png");
+        ImageIcon logo = new ImageIcon("src/Images/logo.png");
         this.setIconImage(logo.getImage());
         //this.setLocationRelativeTo(null);
-        this.add(gp,BorderLayout.CENTER);
+        this.add(gp, BorderLayout.CENTER);
         this.menu();
 
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -54,117 +56,86 @@ public class GUI_MyFrame extends JFrame
     }
 
 
-
     // frame.setBounds(30, 30, 300, 300);
     // Set the Frame boundaries to be 300x300 on the screen,
     // and position it 30 pixels from the top and left edges of the monitor.
 
     public void setBounds() {
         Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
-        int width = (int) (dimension.getWidth()/2);
-        int Height = (int) (dimension.getHeight()/2);
-        int x = (int) (dimension.getWidth()/2-dimension.getWidth()/4);
-        int y = (int) (dimension.getHeight()/2 - dimension.getHeight()/ 4);
-        this.setBounds(x, y,width,Height);
+        int width = (int) (dimension.getWidth() / 2);
+        int Height = (int) (dimension.getHeight() / 2);
+        int x = (int) (dimension.getWidth() / 2 - dimension.getWidth() / 4);
+        int y = (int) (dimension.getHeight() / 2 - dimension.getHeight() / 4);
+        this.setBounds(x, y, width, Height);
     }
 
-    public void menu()
-    {
+    public void menu() {
         //////first menu  the save load menu
-        JMenuBar menu=new JMenuBar();
-        JMenu file=new JMenu("file");
+        JMenuBar menu = new JMenuBar();
+        JMenu file = new JMenu("file");
         JMenuItem load, save;
-        load=new JMenuItem("load");
+        load = new JMenuItem("load");
 
         /////load
-        load.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                JFileChooser fileChooser = new JFileChooser("data");
-                if (fileChooser.showOpenDialog(frame)==JFileChooser.APPROVE_OPTION)
-                {
-                   ///reading
-                    //System.out.println(fileChooser.getSelectedFile().getAbsolutePath());
-                    algo.load(fileChooser.getSelectedFile().getAbsolutePath());
-                    setVisible(false);
-                    new GUI_MyFrame((MyGraph) algo.getGraph());
-                }
-            }
-        });
+        load.addActionListener(this);
+
         /////////save
-        save=new JMenuItem("save");
-        save.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser fileChooser = new JFileChooser("data");
-                if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-                    File file = fileChooser.getSelectedFile();
-                    algo.save(fileChooser.getSelectedFile().getAbsolutePath());
-                }
-            }
-        });
+        save = new JMenuItem("save");
+        save.addActionListener(this);
+
         file.add(load);
         file.add(save);
 
         ///////algo menu
-        JMenu algorithms=new JMenu("algorithms");
-        JMenuItem addNode,addEdge,center, isConnected,shortestDist,shortestPath,tsp,rmvN,rmvE;
+        JMenu algorithms = new JMenu("algorithms");
+        JMenuItem addNode, addEdge, center, isConnected, shortestDist, shortestPath, tsp, rmvN = new JMenuItem("remove node"), rmvE;
 
 
         ////////////////////////////////////////////////////////addNode///////////////////////////////////////////////////////////////
-        addNode=new JMenuItem(new AbstractAction() {
+        addNode = new JMenuItem(new AbstractAction() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 String id = JOptionPane.showInputDialog(frame, "enter node id", null);
-                if(algo.getGraph().getNode(Integer.parseInt(id))==null)
-                {
-                    String coordinates=JOptionPane.showInputDialog(frame, "enter node coordinates split by regex ','", "x,y,z");
-                    MyNode a=new MyNode(Integer.parseInt(id),new location(coordinates));
+                if (algo.getGraph().getNode(Integer.parseInt(id)) == null) {
+                    String coordinates = JOptionPane.showInputDialog(frame, "enter node coordinates split by regex ','", "x,y,z");
+                    MyNode a = new MyNode(Integer.parseInt(id), new location(coordinates));
                     algo.getGraph().addNode(a);
                     MyGraph g = (MyGraph) algo.getGraph();
 
-                    JOptionPane.showMessageDialog(null,"node added successfully");
+                    JOptionPane.showMessageDialog(null, "node added successfully");
                     setVisible(false);
                     new GUI_MyFrame((MyGraph) algo.getGraph());
-                }
-                else
-                {
-                    String coordinates=JOptionPane.showInputDialog(frame, "enter new node coordinates split by regex ','", "x,y,z");
-                    MyNode a=new MyNode(Integer.parseInt(id),new location(coordinates));
+                } else {
+                    String coordinates = JOptionPane.showInputDialog(frame, "enter new node coordinates split by regex ','", "x,y,z");
+                    MyNode a = new MyNode(Integer.parseInt(id), new location(coordinates));
                     MyGraph g = (MyGraph) algo.getGraph();
                     g.addNode(a);
-                    JOptionPane.showMessageDialog(null,"node moved successfully");
+                    JOptionPane.showMessageDialog(null, "node moved successfully");
                     setVisible(false);
                     new GUI_MyFrame(g);
                 }
             }
         });
         /////////////////////////////////////////////////////////add edge///////////////////////////////////////////////////////////
-        addEdge=new JMenuItem(new AbstractAction() {
+        addEdge = new JMenuItem(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
                 String src = JOptionPane.showInputDialog(frame, "enter src node id", null);
-                int s=Integer.parseInt(src);
-                if(algo.getGraph().getNode(s)==null){
+                int s = Integer.parseInt(src);
+                if (algo.getGraph().getNode(s) == null) {
                     /////pop up error: node doesn't exist
-                    JOptionPane.showMessageDialog(null,"error: src node doesn't exist");
-                }
-                else
-                {
-                    String dest= JOptionPane.showInputDialog(frame, "enter dest node id", null);
-                    int d=Integer.parseInt(dest);
-                    if(algo.getGraph().getNode(d)==null)
-                    {
+                    JOptionPane.showMessageDialog(null, "error: src node doesn't exist");
+                } else {
+                    String dest = JOptionPane.showInputDialog(frame, "enter dest node id", null);
+                    int d = Integer.parseInt(dest);
+                    if (algo.getGraph().getNode(d) == null) {
                         /////pop up error: node doesn't exist
-                        JOptionPane.showMessageDialog(null,"error: dest node doesn't exist");
-                    }
-                    else
-                    {
-                        String w=    JOptionPane.showInputDialog(frame, "enter node weight", null);
-                        MyGraph g= (MyGraph) algo.getGraph();
-                        g.connect(s,d,Double.parseDouble(w));
+                        JOptionPane.showMessageDialog(null, "error: dest node doesn't exist");
+                    } else {
+                        String w = JOptionPane.showInputDialog(frame, "enter node weight", null);
+                        MyGraph g = (MyGraph) algo.getGraph();
+                        g.connect(s, d, Double.parseDouble(w));
                         setVisible(false);
                         new GUI_MyFrame(g);
                     }
@@ -172,187 +143,170 @@ public class GUI_MyFrame extends JFrame
             }
         });
         /////////////////////////////////////////////////////////center/////////////////////////////////////////////////////////
-        center=new JMenuItem(new AbstractAction() {
+        center = new JMenuItem(new AbstractAction() {
             @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                NodeData n=algo.center();
-                /////////popup center
-
-                JOptionPane.showMessageDialog(null,"the center node is: node "+n.getKey());
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    NodeData n = algo.center();
+                    /////////popup center
+                    JOptionPane.showMessageDialog(null, "the center node is: node " + n.getKey());
+                } catch (RuntimeException e1) {
+                    JOptionPane.showMessageDialog(null, "error ");
+                }
             }
         });
 
-        isConnected=new JMenuItem(new AbstractAction() {
+        isConnected = new JMenuItem(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(algo.isConnected())
-                {
+                if (algo.isConnected()) {
                     ////////pop up this graph is connected
-                    JOptionPane.showMessageDialog(null,"this graph is connected");
-                }
-                else
-                {
+                    JOptionPane.showMessageDialog(null, "this graph is connected");
+                } else {
                     ///////////pop this graph isn't connected
-                    JOptionPane.showMessageDialog(null,"this graph isn't connected");
+                    JOptionPane.showMessageDialog(null, "this graph isn't connected");
 
                 }
             }
         });
         ////////////////////////////////////shortest path////////////////////////////////////////////
-        shortestDist=new JMenuItem(new AbstractAction() {
+        shortestDist = new JMenuItem(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
                 String src = JOptionPane.showInputDialog(frame, "enter src node id", null);
-                int s=Integer.parseInt(src);
-                if(algo.getGraph().getNode(s)==null){
+                int s = Integer.parseInt(src);
+                if (algo.getGraph().getNode(s) == null) {
                     /////pop up error: node doesn't exist
-                    JOptionPane.showMessageDialog(null,"error: src node doesn't exist");
-                }
-                else
-                {
-                    String dest= JOptionPane.showInputDialog(frame, "enter dest node id", null);
-                    int d=Integer.parseInt(dest);
-                    if(algo.getGraph().getNode(d)==null)
-                    {
+                    JOptionPane.showMessageDialog(null, "error: src node doesn't exist");
+                } else {
+                    String dest = JOptionPane.showInputDialog(frame, "enter dest node id", null);
+                    int d = Integer.parseInt(dest);
+                    if (algo.getGraph().getNode(d) == null) {
                         /////pop up error: node doesn't exist
-                        JOptionPane.showMessageDialog(null,"error: dest node doesn't exist");
-                    }
-                    else
-                    {
-                        double ans=algo.shortestPathDist(s,d);
+                        JOptionPane.showMessageDialog(null, "error: dest node doesn't exist");
+                    } else {
+                        double ans = algo.shortestPathDist(s, d);
                         /////////////pop it up
-                        JOptionPane.showMessageDialog(null,"the shortest dist between "+s+"-->"+d +" is "+ans);
+                        JOptionPane.showMessageDialog(null, "the shortest dist between " + s + "-->" + d + " is " + ans);
                     }
                 }
             }
         });
 
         //////////////////////shortest path/////////////////////////////////
-        shortestPath=new JMenuItem(new AbstractAction() {
+        shortestPath = new JMenuItem(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
                 String src = JOptionPane.showInputDialog(frame, "enter src node id", null);
-                int s=Integer.parseInt(src);
-                if(algo.getGraph().getNode(s)==null){
+                int s = Integer.parseInt(src);
+                if (algo.getGraph().getNode(s) == null) {
                     /////pop up error: node doesn't exist
                     JOptionPane.showMessageDialog(null, "error: node doesn't exist");
-                }
-                else
-                {
-                    String dest= JOptionPane.showInputDialog(frame, "enter dest node id", null);
-                    int d=Integer.parseInt(dest);
-                    if(algo.getGraph().getNode(d)==null)
-                    {
+                } else {
+                    String dest = JOptionPane.showInputDialog(frame, "enter dest node id", null);
+                    int d = Integer.parseInt(dest);
+                    if (algo.getGraph().getNode(d) == null) {
                         /////pop up error: node doesn't exist
-                    }
-                    else
-                    {
-                        List<NodeData> ans=algo.shortestPath(s,d);
-                        Iterator i =ans.iterator();
-                        NodeData prev=new MyNode(Integer.MAX_VALUE,new location("1,1,1"));
-                        boolean first=true;
-                        String path="";
-                        while (i.hasNext())
-                        {
-                            if(first)
-                            {
-                                prev= (NodeData) i.next();
-                                first=false;
-                                path+=prev.getKey();
-                            }
-                            else
-                            {
-                                NodeData cur= (NodeData) i.next();
-                                EdgeData edge=algo.getGraph().getEdge(prev.getKey(),cur.getKey() );
+                    } else {
+                        List<NodeData> ans = algo.shortestPath(s, d);
+                        Iterator i = ans.iterator();
+                        NodeData prev = new MyNode(Integer.MAX_VALUE, new location("1,1,1"));
+                        boolean first = true;
+                        String path = "";
+                        while (i.hasNext()) {
+                            if (first) {
+                                prev = (NodeData) i.next();
+                                first = false;
+                                path += prev.getKey();
+                            } else {
+                                NodeData cur = (NodeData) i.next();
+                                EdgeData edge = algo.getGraph().getEdge(prev.getKey(), cur.getKey());
                                 edge.setInfo("red");
-                                prev=cur;
-                                path+="->"+prev.getKey();
+                                prev = cur;
+                                path += "->" + prev.getKey();
                             }
                         }
 
-                        JOptionPane.showMessageDialog(frame, "the shortest path is "+path);
+                        JOptionPane.showMessageDialog(frame, "the shortest path is " + path);
                     }
                 }
             }
         });
         /////////////////////////////////////////////TSP////////////////////////////////////////
-        tsp=new JMenuItem(new AbstractAction() {
+        tsp = new JMenuItem(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ArrayList<NodeData> cities=new ArrayList<>();
+                ArrayList<NodeData> cities = new ArrayList<>();
                 String[] citiesId = (JOptionPane.showInputDialog(frame, "enter cities ids separated by ',' regex ", null)).split(",");
-                for (int i = 0; i < citiesId.length; i++)
-                {
+                for (int i = 0; i < citiesId.length; i++) {
                     NodeData v = algo.getGraph().getNode(Integer.parseInt(citiesId[i]));
                     cities.add(v);
                 }
-                List<NodeData> ans=algo.tsp(cities);
-                Iterator i =ans.iterator();
-                NodeData prev=new MyNode(Integer.MAX_VALUE,new location("1,1,1"));
-                boolean first=true;
-                while (i.hasNext())
-                {
-                    if(first)
-                    {
-                        prev= (NodeData) i.next();
-                        first=false;
-
-                    }
-                    else
-                    {
-                        NodeData cur= (NodeData) i.next();
-                        EdgeData edge=algo.getGraph().getEdge(prev.getKey(),cur.getKey() );
-                        edge.setInfo("green");
+                List<NodeData> ans = algo.tsp(cities);
+                Iterator<NodeData> i = ans.iterator();
+                NodeData prev = new MyNode(Integer.MAX_VALUE, new location("1,1,1"));
+                boolean first = true;
+                String answer = "";
+                while (i.hasNext()) {
+                    if (first) {
+                        prev = i.next();
+                        first = false;
+                        if (cities.contains(prev)) {
+                            answer += prev.getKey() + "->";
+                            cities.remove(prev);
+                        }
+                    } else {
+                        NodeData cur = (NodeData) i.next();
+                        if (i.hasNext() && cities.contains(cur)) {
+                            answer += cur.getKey() + "->";
+                            cities.remove(cur);
+                        } else if (cities.contains(cur)) {
+                            answer += cur.getKey();
+                            cities.remove(cur);
+                        }
                     }
                 }
-
+                JOptionPane.showMessageDialog(null, answer);
             }
         });
         ////////////////////////remove node
 
-        rmvN=new JMenuItem(new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String id=(JOptionPane.showInputDialog(frame, "which node to remove (by id)", null));
-                MyGraph g= (MyGraph) algo.getGraph();
-                int  NodeId=Integer.parseInt(id);
-                if(algo.getGraph().getNode(NodeId)==null)
-                {
-                    JOptionPane.showMessageDialog(null,"the node doesn't exist");
-                }
-                else
-                {
-                    g.removeNode(NodeId);
-                    setVisible(false);
-                    algo.init(g);
-                    new GUI_MyFrame((MyGraph) algo.getGraph());
-                }
-            }
-        });
+        rmvN.addActionListener((ActionListener) this);
+        //; = new JMenuItem(new AbstractAction() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                String id = (JOptionPane.showInputDialog(frame, "which node to remove (by id)", null));
+//                MyGraph g = (MyGraph) algo.getGraph();
+//                int NodeId = Integer.parseInt(id);
+//                if (algo.getGraph().getNode(NodeId) == null) {
+//                    JOptionPane.showMessageDialog(null, "the node doesn't exist");
+//                }
+//                else {
+//                    g.removeNode(NodeId);
+//                   // super.super.repaint();
+////                    setVisible(false);
+////                    algo.init(g);
+////                    new GUI_MyFrame((MyGraph) algo.getGraph());
+//                }
+//            }
+//        });
         //////////////////////////////remove edge////////////
-        rmvE=new JMenuItem(new AbstractAction() {
+        rmvE = new JMenuItem(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String src=(JOptionPane.showInputDialog(frame, "enter src of the desired edge", null));
-                int source=Integer.parseInt(src);
-                if(algo.getGraph().getNode(source)==null)
-                {
-                    JOptionPane.showMessageDialog(null,"the src node doesn't exist");
-                }
-                else
-                {
-                    String dest=(JOptionPane.showInputDialog(frame, "enter the dest of the desired edge", null));
-                    int d=Integer.parseInt(dest);
-                    if(algo.getGraph().getNode(d)==null)
-                    {
-                        JOptionPane.showMessageDialog(null,"the dest node doesn't exist");
-                    }
-                    else
-                    {
-                        algo.getGraph().removeEdge(source,d);
+                String src = (JOptionPane.showInputDialog(frame, "enter src of the desired edge", null));
+                int source = Integer.parseInt(src);
+                if (algo.getGraph().getNode(source) == null) {
+                    JOptionPane.showMessageDialog(null, "the src node doesn't exist");
+                } else {
+                    String dest = (JOptionPane.showInputDialog(frame, "enter the dest of the desired edge", null));
+                    int d = Integer.parseInt(dest);
+                    if (algo.getGraph().getNode(d) == null) {
+                        JOptionPane.showMessageDialog(null, "the dest node doesn't exist");
+                    } else {
+                        algo.getGraph().removeEdge(source, d);
                         setVisible(false);
                         new GUI_MyFrame((MyGraph) algo.getGraph());
                     }
@@ -362,62 +316,54 @@ public class GUI_MyFrame extends JFrame
         });
 
 
-
-
         ////////////jmenu info
-        JMenu info=new JMenu("info");
-        JMenuItem getNode,GetEdge,SizeOfNodes,SizeOfEdges;
+        JMenu info = new JMenu("info");
+        JMenuItem getNode, GetEdge, SizeOfNodes, SizeOfEdges;
 
-        getNode=new JMenuItem(new AbstractAction() {
+        getNode = new JMenuItem(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String v=(JOptionPane.showInputDialog(frame, "enter the id of the desired node", null));
-                int id=Integer.parseInt(v);
-                location l= (location) algo.getGraph().getNode(id).getLocation();
-                String loc= l.x()+","+l.y()+","+l.y();
-                JOptionPane.showMessageDialog(null,"the coordinates of node "+v+" are "+loc);
+                String v = (JOptionPane.showInputDialog(frame, "enter the id of the desired node", null));
+                int id = Integer.parseInt(v);
+                location l = (location) algo.getGraph().getNode(id).getLocation();
+                String loc = l.x() + "," + l.y() + "," + l.y();
+                JOptionPane.showMessageDialog(null, "the coordinates of node " + v + " are " + loc);
             }
         });
 
-        GetEdge=new JMenuItem(new AbstractAction() {
+        GetEdge = new JMenuItem(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String src=(JOptionPane.showInputDialog(frame, "enter src of the desired edge", null));
-                int source=Integer.parseInt(src);
-                if(algo.getGraph().getNode(source)==null)
-                {
-                    JOptionPane.showMessageDialog(null,"the src node doesn't exist");
-                }
-                else
-                {
-                    String dest=(JOptionPane.showInputDialog(frame, "enter the dest of the desired edge", null));
-                    int d=Integer.parseInt(dest);
-                    if(algo.getGraph().getNode(d)==null)
-                    {
-                        JOptionPane.showMessageDialog(null,"the dest node doesn't exist");
-                    }
-                    else
-                    {
-                        double ans = algo.getGraph().getEdge(source,d).getWeight();
-                        JOptionPane.showMessageDialog(null,"the edge weight is: "+ans);
+                String src = (JOptionPane.showInputDialog(frame, "enter src of the desired edge", null));
+                int source = Integer.parseInt(src);
+                if (algo.getGraph().getNode(source) == null) {
+                    JOptionPane.showMessageDialog(null, "the src node doesn't exist");
+                } else {
+                    String dest = (JOptionPane.showInputDialog(frame, "enter the dest of the desired edge", null));
+                    int d = Integer.parseInt(dest);
+                    if (algo.getGraph().getNode(d) == null) {
+                        JOptionPane.showMessageDialog(null, "the dest node doesn't exist");
+                    } else {
+                        double ans = algo.getGraph().getEdge(source, d).getWeight();
+                        JOptionPane.showMessageDialog(null, "the edge weight is: " + ans);
 
                     }
                 }
             }
         });
         //////////////////////size of nodes
-        SizeOfNodes=new JMenuItem(new AbstractAction() {
+        SizeOfNodes = new JMenuItem(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null,"we have "+algo.getGraph().nodeSize()+" nodes in the graph");
+                JOptionPane.showMessageDialog(null, "we have " + algo.getGraph().nodeSize() + " nodes in the graph");
             }
         });
 
         //////////////////////size of edges
-        SizeOfEdges=new JMenuItem(new AbstractAction() {
+        SizeOfEdges = new JMenuItem(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null,"we have "+algo.getGraph().edgeSize()+" edges in the graph");
+                JOptionPane.showMessageDialog(null, "we have " + algo.getGraph().edgeSize() + " edges in the graph");
             }
         });
 
@@ -429,7 +375,7 @@ public class GUI_MyFrame extends JFrame
         shortestDist.setText("shortest Dist");
         shortestPath.setText("shortest Path");
         tsp.setText("TSP");
-        rmvN.setText("remove node");
+
         rmvE.setText("remove edge");
         getNode.setText("get node coordinates");
         GetEdge.setText("get edge weight");
@@ -461,8 +407,38 @@ public class GUI_MyFrame extends JFrame
     }
 
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getActionCommand() == "remove node") {
+            String id = (JOptionPane.showInputDialog(frame, "which node to remove (by id)", null));
+            MyGraph g = (MyGraph) algo.getGraph();
+            int NodeId = Integer.parseInt(id);
+            if (algo.getGraph().getNode(NodeId) == null) {
+                JOptionPane.showMessageDialog(null, "the node doesn't exist");
+            } else {
+                g.removeNode(NodeId);
+            }
+        }
+        if(e.getActionCommand()=="save")
+        {
+            JFileChooser fileChooser = new JFileChooser("data");
+            if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+                File file = fileChooser.getSelectedFile();
+                algo.save(fileChooser.getSelectedFile().getAbsolutePath());
+            }
+        }
+        if(e.getActionCommand()=="load")
+        {
+            JFileChooser fileChooser = new JFileChooser("src//data");
+            if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
+                ///reading
+                //System.out.println(fileChooser.getSelectedFile().getAbsolutePath());
+                algo.load(fileChooser.getSelectedFile().getAbsolutePath());
+//                setVisible(false);
+//                new GUI_MyFrame((MyGraph) algo.getGraph());
+                this.repaint();
+            }
+        }
 
-
-
-
+    }
 }

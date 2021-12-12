@@ -12,16 +12,17 @@ import java.util.Iterator;
 public class GUI_Panel extends JPanel
 {
     private double min_x,max_x,min_y,max_y;
-    MyGraph graph;
+    MyAlgo algo;
 
-    public GUI_Panel(MyGraph g)
+    public GUI_Panel(MyAlgo g)
     {
-        this.graph =g;
+        this.algo =g;
         this.setOpaque(true);
     }
 
     public void paint(Graphics graphics)
     {
+        MyGraph graph= (MyGraph) algo.getGraph();
         this.setBackground(Color.WHITE);
         Graphics2D graphic= (Graphics2D) graphics.create();
 
@@ -132,11 +133,12 @@ public class GUI_Panel extends JPanel
 
     private void setMinMax()
     {
+        MyGraph graph= (MyGraph) algo.getGraph();
         min_x=Double.MAX_VALUE;
         max_x=Double.MIN_VALUE;
         min_y=Double.MAX_VALUE;
         max_y=Double.MIN_VALUE;
-        Iterator<NodeData> i = this.graph.nodeIter();
+        Iterator<NodeData> i = graph.nodeIter();
         while (i.hasNext())
         {
             NodeData v=i.next();
