@@ -19,7 +19,7 @@ public class GraphGenneratur {
     }
     public DirectedWeightedGraph Generate()
     {
-        ///////liav was here
+       
         Graph =new MyGraph();
         Random rand =new Random();
         //Node genneratur
