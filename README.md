@@ -63,5 +63,7 @@ https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
 * MyAlgo
 * MyEdge
 * MyGraph  
-![צילום מסך 2021-12-09 172518](https://user-images.githubusercontent.com/92921822/145424927-416babe3-3c3e-499d-8442-7f6c59537554.jpg)
+![צילום מסך 2021-12-09 172518](https://user-images.githubusercontent.com/92921822/145424927-416babe3-3c3e-499d-8442-7f6c59537554.jpg)  
+![צילום מסך 2021-12-13 174615](https://user-images.githubusercontent.com/92921822/145843273-01c07999-c024-4e2e-bc74-203dcab92e31.jpg)
+
 
