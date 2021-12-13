@@ -185,7 +185,7 @@ public class MyAlgo implements DirectedWeightedGraphAlgorithms {
             {
                 int key =temp.get(i);
                 Double save=shortestPathDist(cur.getKey(),key);
-                if(save < shortestDist && save != 0)
+                if(save < shortestDist)
                 {
                     shortestDist = save;
                     idShort = key;
@@ -203,7 +203,14 @@ public class MyAlgo implements DirectedWeightedGraphAlgorithms {
             cur = this.g.getNode(Node_to_get);
             temp.remove(temp.get(location));
         }
-        return p;
+        if(p.size()==1)
+        {
+            return null;
+        }
+        else
+        {
+            return p;
+        }
     }
 
     private MyNode[] f(Object[] c)
@@ -211,7 +218,7 @@ public class MyAlgo implements DirectedWeightedGraphAlgorithms {
         ArrayList<MyNode> ans= new ArrayList<>();
         for (Object o:c)
         {
-               ans.add((MyNode) o);
+            ans.add((MyNode) o);
         }
         return (MyNode[]) ans.toArray();
     }
@@ -262,39 +269,39 @@ public class MyAlgo implements DirectedWeightedGraphAlgorithms {
         {
 
 
-        // parsing file json_file
-        Object obj = new JSONParser().parse(new FileReader(file));
+            // parsing file json_file
+            Object obj = new JSONParser().parse(new FileReader(file));
 
-        // typecasting obj to JSONObject
-        JSONObject jo = (JSONObject) obj;
-        //////reading the nodes
-        JSONArray nodes = (JSONArray) jo.get("Nodes");
-        Iterator i= nodes.iterator();
-        while (i.hasNext())
-        {
-            HashMap<String,Object> map= (HashMap<String, Object>) i.next();
-            String pos= (String) map.get("pos");
-            int id= (int) ((long)map.get("id"));
-            String[]position=pos.split(",");
-            location l=new location(Double.parseDouble(position[0])
-                    ,Double.parseDouble(position[1])
-                    ,Double.parseDouble(position[2]));
-            MyNode node=new MyNode(id,l);
-            ans.addNode(node);
-        }
-        ///////reading the edges
-        JSONArray edges= (JSONArray) jo.get("Edges");
-        i= edges.iterator();
-        while (i.hasNext())
-        {
-            HashMap<String,Object> map= (HashMap<String, Object>) i.next();
-            int src= (int)(long) map.get("src");
-            int dest=(int)(long) map.get("dest");
-            double w=(double) map.get("w");
-            ans.connect(src,dest,w);
-        }
-        this.init(ans);
-        return true;
+            // typecasting obj to JSONObject
+            JSONObject jo = (JSONObject) obj;
+            //////reading the nodes
+            JSONArray nodes = (JSONArray) jo.get("Nodes");
+            Iterator i= nodes.iterator();
+            while (i.hasNext())
+            {
+                HashMap<String,Object> map= (HashMap<String, Object>) i.next();
+                String pos= (String) map.get("pos");
+                int id= (int) ((long)map.get("id"));
+                String[]position=pos.split(",");
+                location l=new location(Double.parseDouble(position[0])
+                        ,Double.parseDouble(position[1])
+                        ,Double.parseDouble(position[2]));
+                MyNode node=new MyNode(id,l);
+                ans.addNode(node);
+            }
+            ///////reading the edges
+            JSONArray edges= (JSONArray) jo.get("Edges");
+            i= edges.iterator();
+            while (i.hasNext())
+            {
+                HashMap<String,Object> map= (HashMap<String, Object>) i.next();
+                int src= (int)(long) map.get("src");
+                int dest=(int)(long) map.get("dest");
+                double w=(double) map.get("w");
+                ans.connect(src,dest,w);
+            }
+            this.init(ans);
+            return true;
         }
         catch (IOException e1)
         {

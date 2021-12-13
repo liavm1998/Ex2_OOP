@@ -3,6 +3,8 @@ package classes;
 import api.DirectedWeightedGraph;
 import api.DirectedWeightedGraphAlgorithms;
 
+import java.util.Scanner;
+
 
 /**
  * This class is the classes.main class for classes.Ex2 - your implementation will be tested using this class.
@@ -55,9 +57,13 @@ public class Ex2 {
          */
 
     }
+
     public static void main(String[] args)
     {
-        runGUI("src//data//My1000Nodes.json");
+        Scanner sc= new Scanner(System.in);
+        System.out.print("Enter a location (.json) at the end");
+        String str= sc.nextLine(); //reads string.
+        runGUI(str);
     }
 
 }

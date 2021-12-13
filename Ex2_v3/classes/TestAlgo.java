@@ -64,7 +64,7 @@ public class TestAlgo
     public void Start()
     {
         this.Algo=new MyAlgo();
-        Algo.load("src//data//My1000Nodes.json");
+        Algo.load("src//data//My10000Nodes.json");
     }
 
     public void Start1()
@@ -115,8 +115,6 @@ public class TestAlgo
         {
             EdgeData tempEdge = EdgeGraph.next();
             EdgeData tempgraph= Edgecopy.next();
-            int s =tempgraph.getSrc();
-            int sd =tempEdge.getSrc();
             Assertions.assertEquals(tempgraph.getSrc(),tempEdge.getSrc());
             Assertions.assertEquals(tempgraph.getDest(),tempEdge.getDest());
             Assertions.assertEquals(tempgraph.getWeight(),tempEdge.getWeight());
@@ -126,71 +124,71 @@ public class TestAlgo
     @Test
     void isConnected()
     {
-        Start();
-//        this.Algo.init(this.Graph);
+//        Start();
+        this.Algo.init(this.Graph);
         Assertions.assertTrue(this.Algo.isConnected());
     }
 
     @Test
     void shortestPathDist()
     {
-        Start();
-        double dist =this.Algo.shortestPathDist(0,3);
-        Assertions.assertEquals(dist,this.Algo.shortestPathDist(0,3));
-
-//        this.Algo.init(this.Graph);
-//        int dist = 82;
+//        Start();
+//        double dist =this.Algo.shortestPathDist(0,9999);
 //        Assertions.assertEquals(dist,this.Algo.shortestPathDist(0,3));
+
+        this.Algo.init(this.Graph);
+        int dist = 82;
+        Assertions.assertEquals(dist,this.Algo.shortestPathDist(0,3));
     }
 
     @Test
     void shortestPath()
     {
-//        this.Algo.init(this.Graph);
-//        List<NodeData> ans = new ArrayList<>();
-//        ans.add(this.Graph.getNode(0));
-//        ans.add(this.Graph.getNode(1));
-//        ans.add(this.Graph.getNode(4));
-//        ans.add(this.Graph.getNode(3));
-//        List<NodeData> temp =this.Algo.shortestPath(0,3);
-//        while (!ans.isEmpty() || !temp.isEmpty())
-//        {
-//            Assertions.assertEquals(ans.get(0).getKey(),temp.get(0).getKey());
-//            Assertions.assertEquals(ans.get(0).getWeight(),temp.get(0).getWeight());
-//            Assertions.assertEquals(ans.get(0).getLocation().x(),temp.get(0).getLocation().x());
-//            Assertions.assertEquals(ans.get(0).getLocation().y(),temp.get(0).getLocation().y());
-//            Assertions.assertEquals(ans.get(0).getLocation().z(),temp.get(0).getLocation().z());
-//            ans.remove(0);
-//            temp.remove(0);
-//        }
+        this.Algo.init(this.Graph);
+        List<NodeData> ans = new ArrayList<>();
+        ans.add(this.Graph.getNode(0));
+        ans.add(this.Graph.getNode(1));
+        ans.add(this.Graph.getNode(4));
+        ans.add(this.Graph.getNode(3));
+        List<NodeData> temp =this.Algo.shortestPath(0,3);
+        while (!ans.isEmpty() || !temp.isEmpty())
+        {
+            Assertions.assertEquals(ans.get(0).getKey(),temp.get(0).getKey());
+            Assertions.assertEquals(ans.get(0).getWeight(),temp.get(0).getWeight());
+            Assertions.assertEquals(ans.get(0).getLocation().x(),temp.get(0).getLocation().x());
+            Assertions.assertEquals(ans.get(0).getLocation().y(),temp.get(0).getLocation().y());
+            Assertions.assertEquals(ans.get(0).getLocation().z(),temp.get(0).getLocation().z());
+            ans.remove(0);
+            temp.remove(0);
+        }
 
-        Start();
-        List<NodeData> ans =this.Algo.shortestPath(0,3);
-        Assertions.assertEquals(ans,this.Algo.shortestPath(0,3));
+//        Start();
+//        List<NodeData> ans =this.Algo.shortestPath(0,999);
+//        Assertions.assertEquals(ans,this.Algo.shortestPath(0,999));
     }
 
     @Test
     void center()
     {
-        Start();
-        int center = this.Algo.center().getKey();
+//        Start();
+//        int center = this.Algo.center().getKey();
 //        Assertions.assertEquals(center,this.Algo.center().getKey());
 
-//        this.Algo.init(this.Graph);
-//        int center =4;
-//        Assertions.assertEquals(center,this.Algo.center().getKey());
+        this.Algo.init(this.Graph);
+        int center =4;
+        Assertions.assertEquals(center,this.Algo.center().getKey());
     }
-
     @Test
     void tsp() {
-        Start();
-//        Iterator<NodeData> temp =this.Algo.getGraph().nodeIter();
+//        Start();
+        this.Algo.init(this.Graph);
+        Iterator<NodeData> temp =this.Algo.getGraph().nodeIter();
         List<NodeData> city = new ArrayList<>();
-        int[] temp = {23,964,843,84,9,74,892,47,23,90};
-//        while (temp.hasNext())
-        for(int i =0;i< temp.length;i++)
+//        int[] temp = {23,964,843,84,9,74,892,47,23,90};
+        while (temp.hasNext())
+//        for(int i =0;i< temp.length;i++)
         {
-            city.add(this.Algo.getGraph().getNode(temp[i]));
+            city.add(this.Algo.getGraph().getNode(temp.next().getKey()));
         }
         List<NodeData> TSP =this.Algo.tsp(city);
         while (!city.isEmpty())
@@ -224,7 +222,7 @@ public class TestAlgo
     @Test
     void load() {
         Assertions.assertTrue(this.Algo.getGraph()==null);
-        Algo.load("src//data//My100000Nodes.json");
+        Algo.load("src//data//G1.json");
         Assertions.assertTrue(this.Algo.getGraph()!= null);
     }
 
