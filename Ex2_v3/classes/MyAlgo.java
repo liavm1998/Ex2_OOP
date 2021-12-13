@@ -38,8 +38,8 @@ public class MyAlgo implements DirectedWeightedGraphAlgorithms {
     @Override
     public boolean isConnected()
     {
-        MyNode v=this.g.getV().get(0);
-        this.g.dfs(v);
+        int i=this.g.getV().keySet().iterator().next();
+        MyNode v=this.g.getV().get(i);
         MyGraph r=this.g.reverse();
         return r.dfs(v)&&this.g.dfs(v);
     }
@@ -122,6 +122,10 @@ public class MyAlgo implements DirectedWeightedGraphAlgorithms {
     public List<NodeData> shortestPath(int src, int dest)
     {
         dijkstra(this.g.getV().get(src));
+        if(this.g.getV().get(dest).getWeight()==Double.POSITIVE_INFINITY)
+        {
+            return null;
+        }
         ArrayList<MyNode> c =this.g.getV().get(dest).getShortestPath();
         c.add(this.g.getV().get(dest));
         return new ArrayList<>(c);
@@ -180,9 +184,10 @@ public class MyAlgo implements DirectedWeightedGraphAlgorithms {
             for(int i = 0 ; i < temp.size();i++)
             {
                 int key =temp.get(i);
-                if(shortestPathDist(cur.getKey(),key) < shortestDist)
+                Double save=shortestPathDist(cur.getKey(),key);
+                if(save < shortestDist && save != 0)
                 {
-                    shortestDist = shortestPathDist(cur.getKey(),key);
+                    shortestDist = save;
                     idShort = key;
                     location = i;
                 }

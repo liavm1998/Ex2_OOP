@@ -197,8 +197,14 @@ public class MyGraph extends DirectedGraph implements DirectedWeightedGraph,Comp
         }
         for (Point p:rp)
         {
+            MyEdge e=E.get(p);
             E.remove(p);
+            for (MyNode n:V.values())
+            {
+                n.removeEdge(e);
+            }
         }
+
         V.remove(key);
         return v;
     }
@@ -299,8 +305,11 @@ public class MyGraph extends DirectedGraph implements DirectedWeightedGraph,Comp
     {
         // Initially mark all vertices as not visited
         Vector<Boolean> visited = new Vector<Boolean>(V.size());
-        for (int i = 0; i < V.size(); i++)
-            visited.add(false);
+        HashMap<Integer,Boolean> VIS=new HashMap<>();
+        for (int key:this.V.keySet()) {
+            VIS.put(key,false);
+        }
+
         // Create a stack for DFS
         Stack<MyNode> stack = new Stack<>();
 
@@ -314,9 +323,9 @@ public class MyGraph extends DirectedGraph implements DirectedWeightedGraph,Comp
             // Stack may contain same vertex twice. So
             // we need mark the popped item only
             // if it is not visited.
-            if(visited.get(v.getKey()) == false)
+            if(VIS.get(v.getKey()) == false)
             {
-                visited.set(v.getKey(), true);
+                VIS.put(v.getKey(),true);
             }
             // Get all adjacent vertices of the popped vertex s
             // If a adjacent has not been visited, then push it
@@ -328,11 +337,11 @@ public class MyGraph extends DirectedGraph implements DirectedWeightedGraph,Comp
                 EdgeData e=itr.next();
                 MyNode v1=this.V.get(e.getDest());
 
-                if(!visited.get(v1.getKey()))
+                if(!VIS.get(v1.getKey()))
                     stack.push(v1);
             }
         }
-        for (boolean b:visited)
+        for (boolean b: VIS.values())
         {
             if (!b)
             {
@@ -352,5 +361,4 @@ public class MyGraph extends DirectedGraph implements DirectedWeightedGraph,Comp
 //        }
         return true;
     }
-
 }

@@ -184,11 +184,13 @@ public class TestAlgo
     @Test
     void tsp() {
         Start();
-        Iterator<NodeData> temp =this.Algo.getGraph().nodeIter();
+//        Iterator<NodeData> temp =this.Algo.getGraph().nodeIter();
         List<NodeData> city = new ArrayList<>();
-        while (temp.hasNext())
+        int[] temp = {23,964,843,84,9,74,892,47,23,90};
+//        while (temp.hasNext())
+        for(int i =0;i< temp.length;i++)
         {
-            city.add(temp.next());
+            city.add(this.Algo.getGraph().getNode(temp[i]));
         }
         List<NodeData> TSP =this.Algo.tsp(city);
         while (!city.isEmpty())
@@ -222,7 +224,7 @@ public class TestAlgo
     @Test
     void load() {
         Assertions.assertTrue(this.Algo.getGraph()==null);
-        Algo.load("src//data//G3.json");
+        Algo.load("src//data//My100000Nodes.json");
         Assertions.assertTrue(this.Algo.getGraph()!= null);
     }
 

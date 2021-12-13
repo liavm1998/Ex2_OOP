@@ -5,6 +5,8 @@ import api.GeoLocation;
 import api.NodeData;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MyNode implements NodeData {
     private double weight;
@@ -160,5 +162,34 @@ public class MyNode implements NodeData {
 
     public void setMaxDist(double maxDist) {
         this.maxDist = maxDist;
+    }
+
+    public void RemoveNodeFromLists(MyNode v)
+    {
+        ArrayList<MyEdge> arr = new ArrayList(this.in);
+        arr.addAll(this.out);
+        Set<MyEdge> rem= new HashSet<MyEdge>();
+        for (MyEdge e:this.in)
+        {
+               if(e.getSrc()==v.getKey())
+               {
+                   rem.add(e);
+               }
+        }
+        in.removeAll(rem);
+
+
+        arr = new ArrayList(this.out);
+        arr.addAll(this.out);
+        rem= new HashSet<MyEdge>();
+        for (MyEdge e:this.out)
+        {
+            if(e.getDest()==v.getKey())
+            {
+                rem.add(e);
+            }
+        }
+        out.removeAll(rem);
+
     }
 }

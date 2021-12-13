@@ -53,6 +53,7 @@ public class GUI_MyFrame extends JFrame implements ActionListener {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setVisible(true);
     }
+
     // frame.setBounds(30, 30, 300, 300);
     // Set the Frame boundaries to be 300x300 on the screen,
     // and position it 30 pixels from the top and left edges of the monitor.
@@ -110,12 +111,8 @@ public class GUI_MyFrame extends JFrame implements ActionListener {
         SizeOfNodes = new JMenuItem("amount of nodes");
 
 
-
-
         getNode.addActionListener(this);
         GetEdge.addActionListener(this);
-
-
 
 
         //////////////////////size of nodes
@@ -162,11 +159,12 @@ public class GUI_MyFrame extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, "the node doesn't exist");
             } else {
                 g.removeNode(NodeId);
+                this.algo.init(g);
                 this.repaint();
             }
         }
         if (e.getActionCommand() == "save") {
-            JFileChooser fileChooser = new JFileChooser("data");
+            JFileChooser fileChooser = new JFileChooser("src/data");
             if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
                 File file = fileChooser.getSelectedFile();
                 algo.save(fileChooser.getSelectedFile().getAbsolutePath());
@@ -190,8 +188,7 @@ public class GUI_MyFrame extends JFrame implements ActionListener {
             String loc = l.x() + "," + l.y() + "," + l.y();
             JOptionPane.showMessageDialog(null, "the coordinates of node " + v + " are " + loc);
         }
-        if (e.getActionCommand() == "get edge weight")
-        {
+        if (e.getActionCommand() == "get edge weight") {
             String src = (JOptionPane.showInputDialog(frame, "enter src of the desired edge", null));
             int source = Integer.parseInt(src);
             if (algo.getGraph().getNode(source) == null) {
@@ -265,8 +262,7 @@ public class GUI_MyFrame extends JFrame implements ActionListener {
             }
             JOptionPane.showMessageDialog(null, answer);
         }
-        if (e.getActionCommand() == "shortest Path")
-        {
+        if (e.getActionCommand() == "shortest Path") {
 
             String src = JOptionPane.showInputDialog(frame, "enter src node id", null);
             int s = Integer.parseInt(src);
@@ -277,33 +273,37 @@ public class GUI_MyFrame extends JFrame implements ActionListener {
                 String dest = JOptionPane.showInputDialog(frame, "enter dest node id", null);
                 int d = Integer.parseInt(dest);
                 if (algo.getGraph().getNode(d) == null) {
-                    /////pop up error: node doesn't exist
+                    JOptionPane.showMessageDialog(null, "node doesn't exist");
                 } else {
                     List<NodeData> ans = algo.shortestPath(s, d);
-                    Iterator i = ans.iterator();
-                    NodeData prev = new MyNode(Integer.MAX_VALUE, new location("1,1,1"));
-                    boolean first = true;
-                    String path = "";
-                    while (i.hasNext()) {
-                        if (first) {
-                            prev = (NodeData) i.next();
-                            first = false;
-                            path += prev.getKey();
-                        } else {
-                            NodeData cur = (NodeData) i.next();
-                            EdgeData edge = algo.getGraph().getEdge(prev.getKey(), cur.getKey());
-                            edge.setInfo("red");
-                            prev = cur;
-                            path += "->" + prev.getKey();
+                    if (ans == null)
+                    {
+                        JOptionPane.showMessageDialog(null, "there is no path");
+                    } else {
+                        Iterator i = ans.iterator();
+                        NodeData prev = new MyNode(Integer.MAX_VALUE, new location("1,1,1"));
+                        boolean first = true;
+                        String path = "";
+                        while (i.hasNext()) {
+                            if (first) {
+                                prev = (NodeData) i.next();
+                                first = false;
+                                path += prev.getKey();
+                            } else {
+                                NodeData cur = (NodeData) i.next();
+                                EdgeData edge = algo.getGraph().getEdge(prev.getKey(), cur.getKey());
+                                edge.setInfo("red");
+                                prev = cur;
+                                path += "->" + prev.getKey();
+                            }
                         }
-                    }
 
-                    JOptionPane.showMessageDialog(frame, "the shortest path is " + path);
+                        JOptionPane.showMessageDialog(frame, "the shortest path is " + path);
+                    }
                 }
             }
         }
-        if (e.getActionCommand() == "shortest Dist")
-        {
+        if (e.getActionCommand() == "shortest Dist") {
             String src = JOptionPane.showInputDialog(frame, "enter src node id", null);
             int s = Integer.parseInt(src);
             if (algo.getGraph().getNode(s) == null) {
@@ -322,8 +322,7 @@ public class GUI_MyFrame extends JFrame implements ActionListener {
                 }
             }
         }
-        if (e.getActionCommand() == "add or move Node")
-        {
+        if (e.getActionCommand() == "add or move Node") {
             String id = JOptionPane.showInputDialog(frame, "enter node id", null);
             if (algo.getGraph().getNode(Integer.parseInt(id)) == null) {
                 String coordinates = JOptionPane.showInputDialog(frame, "enter node coordinates split by regex ','", "x,y,z");
@@ -332,8 +331,9 @@ public class GUI_MyFrame extends JFrame implements ActionListener {
                 MyGraph g = (MyGraph) algo.getGraph();
 
                 JOptionPane.showMessageDialog(null, "node added successfully");
-                setVisible(false);
-                new GUI_MyFrame((MyGraph) algo.getGraph());
+//                setVisible(false);
+//                new GUI_MyFrame((MyGraph) algo.getGraph());
+                this.repaint();
             } else {
                 String coordinates = JOptionPane.showInputDialog(frame, "enter new node coordinates split by regex ','", "x,y,z");
                 MyNode a = new MyNode(Integer.parseInt(id), new location(coordinates));
@@ -345,8 +345,7 @@ public class GUI_MyFrame extends JFrame implements ActionListener {
                 this.repaint();
             }
         }
-        if (e.getActionCommand() == "add Edge")
-        {
+        if (e.getActionCommand() == "add Edge") {
             String src = JOptionPane.showInputDialog(frame, "enter src node id", null);
             int s = Integer.parseInt(src);
             if (algo.getGraph().getNode(s) == null) {
@@ -368,8 +367,7 @@ public class GUI_MyFrame extends JFrame implements ActionListener {
                 }
             }
         }
-        if (e.getActionCommand() == "center")
-        {
+        if (e.getActionCommand() == "center") {
             try {
                 NodeData n = algo.center();
                 /////////popup center
@@ -378,8 +376,7 @@ public class GUI_MyFrame extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, "error ");
             }
         }
-              if (e.getActionCommand() == "is Connected?")
-        {
+        if (e.getActionCommand() == "is Connected?") {
             if (algo.isConnected()) {
                 ////////pop up this graph is connected
                 JOptionPane.showMessageDialog(null, "this graph is connected");
