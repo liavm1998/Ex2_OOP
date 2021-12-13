@@ -45,14 +45,14 @@ https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
 
 ### **Interface,class,UML**  
 ---  
-Interface:  
+**Interface**:  
 * DirectedWeightedGraph
 * DirectedWeightedGraphAlgorithms
 * EdgeData
 * GeoLocation
 * NodeData  
 
-class:
+**class**:
 * Dijkstra
 * EX2
 * FibonacciHeap
