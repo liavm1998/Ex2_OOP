@@ -162,6 +162,7 @@ public class GUI_MyFrame extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, "the node doesn't exist");
             } else {
                 g.removeNode(NodeId);
+                this.repaint();
             }
         }
         if (e.getActionCommand() == "save") {
@@ -338,9 +339,10 @@ public class GUI_MyFrame extends JFrame implements ActionListener {
                 MyNode a = new MyNode(Integer.parseInt(id), new location(coordinates));
                 MyGraph g = (MyGraph) algo.getGraph();
                 g.addNode(a);
-                JOptionPane.showMessageDialog(null, "node moved successfully");
-                setVisible(false);
-                new GUI_MyFrame(g);
+//                JOptionPane.showMessageDialog(null, "node moved successfully");
+//                setVisible(false);
+//                new GUI_MyFrame(g);
+                this.repaint();
             }
         }
         if (e.getActionCommand() == "add Edge")
@@ -360,8 +362,9 @@ public class GUI_MyFrame extends JFrame implements ActionListener {
                     String w = JOptionPane.showInputDialog(frame, "enter node weight", null);
                     MyGraph g = (MyGraph) algo.getGraph();
                     g.connect(s, d, Double.parseDouble(w));
-                    setVisible(false);
-                    new GUI_MyFrame(g);
+//                    setVisible(false);
+//                    new GUI_MyFrame(g);
+                    this.repaint();
                 }
             }
         }
