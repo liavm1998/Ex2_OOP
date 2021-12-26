@@ -2,7 +2,7 @@
 
 ### **Explanation**
 ---
-Written by zeev fischer and liav levi.  
+Written by zeev fischer,eden mor and liav levi.  
 This project was all about graphs for starters what we hade to do is implement this following interfaces  
 * GeoLocation – the representation of a Node location 
 * NodeData – the representation of a Node(point) in the Graph
